@@ -3,155 +3,301 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Cek Desil Keluarga</title>
+  <title>Cek Data Desil Keluarga</title>
   <style>
+    :root {
+      --primary-color: #2563eb;
+      --primary-hover: #1d4ed8;
+      --bg-color: #f8fafc;
+      --card-bg: #ffffff;
+      --text-main: #0f172a;
+      --text-muted: #64748b;
+      --border-color: #e2e8f0;
+    }
+
     * {
       box-sizing: border-box;
-      font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
     }
+
     body {
-      background-color: #f4f7f6;
+      background-color: var(--bg-color);
+      color: var(--text-main);
       margin: 0;
       padding: 20px;
       display: flex;
       justify-content: center;
+      min-height: 100vh;
     }
+
     .container {
       width: 100%;
-      max-width: 650px;
-      background: #ffffff;
-      padding: 30px;
-      border-radius: 12px;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.08);
-    }
-    h2 {
-      text-align: center;
-      color: #2c3e50;
-      margin-top: 0;
-      margin-bottom: 25px;
-    }
-    h5 {
-      text-align: center;
-      color: #2c3e50;
-      margin-top: 0;
-      margin-bottom: 25px;
-    }
-    .search-box {
-      display: flex;
-      gap: 10px;
-      margin-bottom: 20px;
-    }
-    input[type="text"] {
-      flex: 1;
-      padding: 12px 16px;
-      border: 2px solid #e0e0e0;
-      border-radius: 8px;
-      font-size: 16px;
-      outline: none;
-      transition: border-color 0.3s;
-    }
-    input[type="text"]:focus {
-      border-color: #3498db;
-    }
-    button {
-      padding: 12px 24px;
-      background-color: #3498db;
-      color: white;
-      border: none;
-      border-radius: 8px;
-      font-size: 16px;
-      font-weight: bold;
-      cursor: pointer;
-      transition: background-color 0.3s;
-    }
-    button:hover {
-      background-color: #2980b9;
-    }
-    #loading {
-      display: none;
-      text-align: center;
-      color: #7f8c8d;
-      margin: 20px 0;
-      font-weight: bold;
-    }
-    .card {
-      border: 1px solid #e2e8f0;
-      border-radius: 10px;
-      padding: 20px;
+      max-width: 600px;
       margin-top: 20px;
+    }
+
+    .header-box {
+      text-align: center;
+      margin-bottom: 24px;
+    }
+
+    .header-box h2 {
+      margin: 0 0 8px 0;
+      font-size: 26px;
+      font-weight: 700;
+      color: var(--text-main);
+    }
+
+    .header-box p {
+      margin: 0;
+      color: var(--text-muted);
+      font-size: 14px;
+    }
+
+    .search-card {
+      background: var(--card-bg);
+      padding: 20px;
+      border-radius: 16px;
+      box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.05);
+      border: 1px solid var(--border-color);
+      margin-bottom: 24px;
+    }
+
+    .input-wrapper {
+      position: relative;
+      display: flex;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+
+    input[type="text"] {
+      width: 100%;
+      padding: 14px 40px 14px 16px;
+      border: 2px solid var(--border-color);
+      border-radius: 10px;
+      font-size: 15px;
+      outline: none;
+      transition: all 0.2s ease;
       background-color: #fff;
     }
-    .desil-box {
+
+    input[type="text"]:focus {
+      border-color: var(--primary-color);
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+    }
+
+    .clear-btn {
+      position: absolute;
+      right: 12px;
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      font-size: 18px;
+      cursor: pointer;
+      display: none;
+      padding: 0;
+      line-height: 1;
+    }
+
+    button.btn-search {
+      width: 100%;
+      padding: 14px;
+      background-color: var(--primary-color);
+      color: white;
+      border: none;
+      border-radius: 10px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background-color 0.2s ease;
+    }
+
+    button.btn-search:hover {
+      background-color: var(--primary-hover);
+    }
+
+    /* Loading Spinner */
+    .spinner-box {
+      display: none;
+      text-align: center;
+      padding: 30px 0;
+    }
+
+    .spinner {
+      width: 40px;
+      height: 40px;
+      border: 4px solid var(--border-color);
+      border-top: 4px solid var(--primary-color);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+      margin: 0 auto 12px;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    /* Card Hasil */
+    .result-card {
+      background: var(--card-bg);
+      border-radius: 16px;
+      padding: 24px;
+      box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.05);
+      border: 1px solid var(--border-color);
+      margin-bottom: 20px;
+      animation: fadeIn 0.3s ease-in-out;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Tampilan Desil Menonjol */
+    .desil-banner {
       background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
       color: #ffffff;
       padding: 20px;
-      border-radius: 8px;
+      border-radius: 12px;
       text-align: center;
       margin-bottom: 20px;
+      box-shadow: 0 4px 12px rgba(30, 60, 114, 0.2);
     }
-    .desil-title {
-      font-size: 14px;
+
+    .desil-label {
+      font-size: 13px;
       text-transform: uppercase;
       letter-spacing: 1.5px;
-      opacity: 0.9;
-      margin-bottom: 5px;
+      opacity: 0.85;
+      margin-bottom: 4px;
     }
-    .desil-value {
-      font-size: 48px;
+
+    .desil-number {
+      font-size: 46px;
       font-weight: 800;
-      line-height: 1.1;
+      line-height: 1;
+      margin-bottom: 6px;
     }
-    .detail-table {
-      width: 100%;
-      border-collapse: collapse;
-    }
-    .detail-table td {
-      padding: 8px 4px;
-      vertical-align: top;
-      font-size: 15px;
-    }
-    .detail-table td.label {
-      width: 40%;
-      color: #64748b;
-      font-weight: 600;
-    }
-    .detail-table td.value {
-      width: 60%;
-      color: #1e293b;
+
+    .desil-sub {
+      font-size: 13px;
+      background: rgba(255, 255, 255, 0.2);
+      display: inline-block;
+      padding: 4px 12px;
+      border-radius: 20px;
       font-weight: 500;
     }
-    .no-result {
+
+    /* Detail Informasi */
+    .info-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .info-item {
+      display: flex;
+      justify-content: space-between;
+      border-bottom: 1px dashed var(--border-color);
+      padding-bottom: 8px;
+    }
+
+    .info-item:last-child {
+      border-bottom: none;
+      padding-bottom: 0;
+    }
+
+    .info-label {
+      color: var(--text-muted);
+      font-size: 14px;
+      font-weight: 500;
+    }
+
+    .info-value {
+      color: var(--text-main);
+      font-size: 14px;
+      font-weight: 600;
+      text-align: right;
+    }
+
+    .no-result, .error-result {
       text-align: center;
-      color: #e74c3c;
-      margin-top: 20px;
-      font-weight: bold;
+      padding: 24px;
+      background: #fef2f2;
+      color: #dc2626;
+      border-radius: 12px;
+      border: 1px solid #fecaca;
+      font-size: 14px;
+      font-weight: 500;
     }
   </style>
 </head>
 <body>
 
 <div class="container">
-  <h2>Cek Data Desil Keluarga Desa Tunggur</h2>
-  <h5>Data Per September 2026</h5>
-  <h5>Untuk Penuruan Desil bisa Akses di Link Berikut <a href="https://dtsen-form.bps.go.id/">dtsen-form.bps.go.id/</a></h5>
-  <h5>Desil 1-5 Tidak Perlu Pembaruan Desil</h5>
-  <div class="search-box">
-    <input type="text" id="keyword" placeholder="Masukkan No KK atau Nama Kepala Keluarga..." onkeypress="handleKeyPress(event)">
-    <button onclick="prosesCari()">Cari</button>
+  <div class="header-box">
+    <h2>Cek Desil Keluarga</h2>
+    <p>Cari berdasarkan Nomor KK atau Nama Kepala Keluarga</p>
+  </div>
+
+  <div class="search-card">
+    <div class="input-wrapper">
+      <input type="text" id="keyword" placeholder="Masukkan No KK atau Nama..." onkeypress="handleKeyPress(event)" oninput="toggleClearBtn()">
+      <button class="clear-btn" id="clearBtn" onclick="clearInput()">&times;</button>
+    </div>
+    <button class="btn-search" onclick="prosesCari()">Cari Data</button>
   </div>
   
-  <div id="loading">Memproses pencarian data...</div>
+  <div class="spinner-box" id="loading">
+    <div class="spinner"></div>
+    <div style="color: var(--text-muted); font-size: 14px;">Mencari data...</div>
+  </div>
+
   <div id="result"></div>
 </div>
 
 <script>
   // GANTI URL DI BAWAH DENGAN URL WEB APP GOOGLE APPS SCRIPT ANDA
-  const API_URL = "https://script.google.com/macros/s/AKfycbxU-Xv2MdY30RLYr-8iSqbRwSE7Wj3GfxfspfyyaLVseCBmlUjTz3yoDJ5iPi3fWTap/exec";
+  const API_URL = "https://script.google.com/macros/s/AKfycbx.../exec";
 
   function handleKeyPress(e) {
     if (e.key === 'Enter') {
       prosesCari();
     }
+  }
+
+  function toggleClearBtn() {
+    const input = document.getElementById('keyword');
+    const clearBtn = document.getElementById('clearBtn');
+    clearBtn.style.display = input.value.length > 0 ? 'block' : 'none';
+  }
+
+  function clearInput() {
+    document.getElementById('keyword').value = '';
+    document.getElementById('result').innerHTML = '';
+    toggleClearBtn();
+    document.getElementById('keyword').focus();
+  }
+
+  // Fungsi menyensor Nomor KK di Sisi Frontend (Keamanan Tambahan)
+  function maskNoKK(noKK) {
+    if (!noKK) return "-";
+    const str = noKK.toString().trim();
+    if (str.length <= 8) return str.substring(0, 2) + "****" + str.substring(str.length - 2);
+    // Format Sensor: 6 digit awal + 6 bintang + 4 digit akhir (Total 16 Digit)
+    return str.substring(0, 6) + "******" + str.substring(str.length - 4);
+  }
+
+  // Keterangan Kategori Ekonomi berdasarkan Desil
+  function getKeteranganDesil(desil) {
+    const d = parseInt(desil);
+    if (d === 1) return "Sangat Miskin / Desil 1";
+    if (d === 2) return "Miskin / Desil 2";
+    if (d === 3) return "Hampir Miskin / Desil 3";
+    if (d === 4) return "Rentan Miskin / Desil 4";
+    if (d >= 5) return "Keluarga Mampu / Desil " + d;
+    return "Kategori Desil " + desil;
   }
 
   async function prosesCari() {
@@ -168,58 +314,62 @@
     loadingDiv.style.display = 'block';
     
     try {
-      // Google Apps Script redirect otomatis, fetch default (follow redirects) akan menanganinya
       const response = await fetch(`${API_URL}?keyword=${encodeURIComponent(input)}`);
       const res = await response.json();
       
       loadingDiv.style.display = 'none';
 
       if (res.status === 'error') {
-        resultDiv.innerHTML = `<div class="no-result">${res.message}</div>`;
+        resultDiv.innerHTML = `<div class="error-result">${res.message}</div>`;
         return;
       }
       
       tampilkanHasil(res.data);
     } catch (error) {
       loadingDiv.style.display = 'none';
-      resultDiv.innerHTML = `<div class="no-result">Terjadi kesalahan koneksi/server: ${error.message}</div>`;
+      resultDiv.innerHTML = `<div class="error-result">Gagal terhubung ke server. Pastikan URL API sudah benar dan koneksi internet stabil.</div>`;
     }
-  }
-
-// Fungsi sensor KK di JavaScript frontend
-  function maskNoKK(noKK) {
-    if (!noKK) return "";
-    const str = noKK.toString();
-    if (str.length <= 8) return str.substring(0, 2) + "****" + str.substring(str.length - 2);
-    // Contoh output: 320101******0001
-    return str.substring(0, 6) + "******" + str.substring(str.length - 4);
   }
 
   function tampilkanHasil(data) {
     const resultDiv = document.getElementById('result');
     
     if (!data || data.length === 0) {
-      resultDiv.innerHTML = '<div class="no-result">Data tidak ditemukan. Pastikan No KK atau Nama yang dimasukkan sudah benar.</div>';
+      resultDiv.innerHTML = '<div class="no-result">Data tidak ditemukan. Pastikan Nomor KK atau Nama yang dimasukkan sudah benar.</div>';
       return;
     }
     
     let html = '';
     data.forEach(item => {
-      // Menggunakan fungsi maskNoKK saat menampilkan
       const maskedKK = maskNoKK(item.noKK);
+      const ketDesil = getKeteranganDesil(item.desil);
 
       html += `
-        <div class="card">
-          <div class="desil-box">
-            <div class="desil-title">Kategori Kesejahteraan</div>
-            <div class="desil-value">DESIL ${item.desil}</div>
+        <div class="result-card">
+          <div class="desil-banner">
+            <div class="desil-label">Status Kesejahteraan</div>
+            <div class="desil-number">DESIL ${item.desil}</div>
+            <div class="desil-sub">${ketDesil}</div>
           </div>
-          <table class="detail-table">
-            <tr><td class="label">No KK</td><td class="value">: ${maskedKK}</td></tr>
-            <tr><td class="label">Nama Kepala Keluarga</td><td class="value">: ${item.namaKK}</td></tr>
-            <tr><td class="label">Alamat</td><td class="value">: ${item.alamat}</td></tr>
-            <tr><td class="label">RT / RW</td><td class="value">: RT ${item.rt} / RW ${item.rw}</td></tr>
-          </table>
+          
+          <div class="info-list">
+            <div class="info-item">
+              <span class="info-label">No KK</span>
+              <span class="info-value">${maskedKK}</span>
+            </div>
+            <div class="info-item">
+              <span class="info-label">Kepala Keluarga</span>
+              <span class="info-value">${item.namaKK || '-'}</span>
+            </div>
+            <div class="info-item">
+              <span class="info-label">Alamat</span>
+              <span class="info-value">${item.alamat || '-'}</span>
+            </div>
+            <div class="info-item">
+              <span class="info-label">RT / RW</span>
+              <span class="info-value">RT ${item.rt || '-'} / RW ${item.rw || '-'}</span>
+            </div>
+          </div>
         </div>
       `;
     });
