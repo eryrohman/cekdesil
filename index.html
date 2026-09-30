@@ -134,6 +134,7 @@
   <h2>Cek Data Desil Keluarga Desa Tunggur</h2>
   <h5>Data Per September 2026</h5>
   <h5>Untuk Penuruan Desil bisa Akses di Link Berikut <a href="https://dtsen-form.bps.go.id/">dtsen-form.bps.go.id/</a></h5>
+  <h5>Desil 1-5 Tidak Perlu Pembaruan Desil</h5>
   <div class="search-box">
     <input type="text" id="keyword" placeholder="Masukkan No KK atau Nama Kepala Keluarga..." onkeypress="handleKeyPress(event)">
     <button onclick="prosesCari()">Cari</button>
@@ -185,7 +186,15 @@
     }
   }
 
-  function tampilkanHasil(data) {
+function maskNoKK(noKK) {
+    if (!noKK) return "";
+    const str = noKK.toString();
+    if (str.length <= 8) return str.substring(0, 2) + "****" + str.substring(str.length - 2);
+    // Contoh output: 320101******0001
+    return str.substring(0, 6) + "******" + str.substring(str.length - 4);
+  }
+
+function tampilkanHasil(data) {
     const resultDiv = document.getElementById('result');
     
     if (!data || data.length === 0) {
@@ -195,7 +204,10 @@
     
     let html = '';
     data.forEach(item => {
-      html += `
+      // Menggunakan fungsi maskNoKK saat menampilkan
+      const maskedKK = maskNoKK(item.noKK);
+
+    html += ``
         <div class="card">
           <div class="desil-box">
             <div class="desil-title">Kategori Kesejahteraan</div>
