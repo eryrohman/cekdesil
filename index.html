@@ -186,7 +186,8 @@
     }
   }
 
-function maskNoKK(noKK) {
+// Fungsi sensor KK di JavaScript frontend
+  function maskNoKK(noKK) {
     if (!noKK) return "";
     const str = noKK.toString();
     if (str.length <= 8) return str.substring(0, 2) + "****" + str.substring(str.length - 2);
@@ -194,7 +195,7 @@ function maskNoKK(noKK) {
     return str.substring(0, 6) + "******" + str.substring(str.length - 4);
   }
 
-function tampilkanHasil(data) {
+  function tampilkanHasil(data) {
     const resultDiv = document.getElementById('result');
     
     if (!data || data.length === 0) {
@@ -207,14 +208,14 @@ function tampilkanHasil(data) {
       // Menggunakan fungsi maskNoKK saat menampilkan
       const maskedKK = maskNoKK(item.noKK);
 
-    html += ``
+      html += `
         <div class="card">
           <div class="desil-box">
             <div class="desil-title">Kategori Kesejahteraan</div>
             <div class="desil-value">DESIL ${item.desil}</div>
           </div>
           <table class="detail-table">
-            <tr><td class="label">No KK</td><td class="value">: ${item.noKK}</td></tr>
+            <tr><td class="label">No KK</td><td class="value">: ${maskedKK}</td></tr>
             <tr><td class="label">Nama Kepala Keluarga</td><td class="value">: ${item.namaKK}</td></tr>
             <tr><td class="label">Alamat</td><td class="value">: ${item.alamat}</td></tr>
             <tr><td class="label">RT / RW</td><td class="value">: RT ${item.rt} / RW ${item.rw}</td></tr>
